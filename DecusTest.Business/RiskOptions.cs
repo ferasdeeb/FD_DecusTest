@@ -19,7 +19,7 @@ namespace DecusTest.Business
                 Name = "OptionalCoverageB",
                 NiceName = "Optional Coverage B",
                 RiskPropertyName = "OptionalCoverageB",
-                Conversions = new Dictionary<object, object>(){ { "Excluded", null }, { "10%", 10 }, { "15%", 15 }, { "20%", 20 } }
+                Conversions = new Dictionary<object, object>(){ { "Excluded", false }, { "10%", 10 }, { "15%", 15 }, { "20%", 20 } }
             },
             new RiskOption()
             {

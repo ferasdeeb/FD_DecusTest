@@ -104,7 +104,28 @@ namespace DecusTest.RaterB
         private RatingOption CreateOptionalCoverageB(RiskData riskData, List<RatingOption> selectedOptions)
         {
             bool isCoverageAvailable = true;
-            List<object> coverageOptions = new List<object> { null, 10, 15, 20 };
+            List<object> coverageOptions = new List<object> { false, 10, 15, 20 };
+
+            /*    
+             
+            Note for the interviewer: The false option is added to the list of options to allow the user to select no additional coverage. 
+            
+
+            If left as null this will cause an issue when attempting to set null to the dictionary key value, as the dictionary expects a non-null value for the key. 
+            This can be seen in Rater.CreateOption in IsMatch function
+                        
+             if (selectedValue != null && selectedValue.Equals(candidate))
+                    return true;
+
+            or old code:
+            (selOpt.SelectedValue != null && selOpt.SelectedValue.Equals(o)) 
+
+
+            as well later on when attempting to set the property value in Rater.SetRiskPropertyValue ( only if the previous occuranse was avoided by comparing "null" string value instead of null object referende)  
+
+
+            */
+
             object coverageDefaultValue = 10;
 
             if (RiskOptions.TryGetRiskOption("OptionalCoverageB", out RiskOption coverageRiskOption) == false)
