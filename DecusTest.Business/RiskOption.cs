@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DecusTest.Business.Helpers;
 
 namespace DecusTest.Business
 {
@@ -24,10 +25,54 @@ namespace DecusTest.Business
 
         public object RevertConversions(object obj, object value)
         {
-
             if (Conversions != null && Conversions.Count > 0)
             {
-                KeyValuePair<object, object> conversionApplied = Conversions.FirstOrDefault(c => c.Value == null && value == null || (Helpers.ConversionsHelpers.TryChangeType(c.Value, this.GetRiskPropertyType(obj), out object convertedValue) && convertedValue != null && convertedValue.Equals(value)) || value != null && value.Equals(c.Value));
+        /*
+         *      Interview Note: Old Code if needed
+         * 
+            
+                KeyValuePair<object, object> conversionApplied = Conversions.FirstOrDefault(c => c.Value == null && value == null 
+                                                                                            || (Helpers.ConversionsHelpers.TryChangeType(c.Value, this.GetRiskPropertyType(obj), out object convertedValue)
+                                                                                                        && convertedValue != null 
+                                                                                                        && convertedValue.Equals(value)
+                                                                                                ) 
+                                                                                            || value != null && value.Equals(c.Value)
+            );
+        */
+
+
+                KeyValuePair<object, object> conversionApplied = default;
+                Type targetType = GetRiskPropertyType(obj);
+
+                foreach (var c in Conversions)
+                {
+                    object convKey = c.Key;
+                    object convValue = c.Value;
+
+                    // Match null -> null
+                    if (value == null && convValue == null)
+                    {
+                        conversionApplied = c;
+                        break;
+                    }
+
+                    // Direct equality check (handles same-type matches)
+                    if (value != null && value.Equals(convValue))
+                    {
+                        conversionApplied = c;
+                        break;
+                    }
+
+                    // Try converting the stored conversion value to the target property type and compare
+                    if (convValue != null &&
+                        ConversionsHelpers.TryChangeType(convValue, targetType, out object convertedValue) &&
+                        convertedValue != null &&
+                        convertedValue.Equals(value))
+                    {
+                        conversionApplied = c;
+                        break;
+                    }
+                }
 
                 if (conversionApplied.Key != null)
                 {
@@ -37,9 +82,11 @@ namespace DecusTest.Business
 
             if (value != null)
             {
-                if (GetRiskPropertyType(obj).IsGenericType)
+                // Interview Note: This was added to avoid multiple calls to GetRiskPropertyType 
+                Type propType = GetRiskPropertyType(obj);
+                if (propType.IsGenericType)
                 {
-                    if (GetRiskPropertyType(obj).GenericTypeArguments[0].Equals(typeof(DateTime)))
+                    if (propType.GenericTypeArguments[0].Equals(typeof(DateTime)))
                     {
                         // Coerce DateTime to string for UI to handle
                         value = DateTime.Parse(value.ToString());
@@ -47,7 +94,7 @@ namespace DecusTest.Business
                 }
                 else
                 {
-                    if (GetRiskPropertyType(obj).Equals(typeof(DateTime)))
+                    if (propType.Equals(typeof(DateTime)))
                     {
                         // Coerce DateTime to string for UI to handle
                         value = DateTime.Parse(value.ToString());

@@ -81,7 +81,7 @@ namespace DecusTest.RaterB
             //Optional Coverage A
             ratingOptions.Add(CreateOptionalCoverageA(riskData, selectedOptions));
 
-            //Optional Coverage C
+            //Optional Coverage B
             ratingOptions.Add(CreateOptionalCoverageB(riskData, selectedOptions));
 
             return ratingOptions;

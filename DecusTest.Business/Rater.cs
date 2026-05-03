@@ -1,4 +1,5 @@
-﻿using DecusTest.Business.Models;
+﻿using DecusTest.Business.Helpers;
+using DecusTest.Business.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,33 +46,19 @@ namespace DecusTest.Business
             {
                 RatingOption selOpt = selectedOptions.FirstOrDefault(o => o.Name.Equals(name));
 
-                if (selOpt != null && options.Any(o =>
-
-                        (selOpt.SelectedValue != null && selOpt.SelectedValue.Equals(o))  //Selected value is not null and is one of the available options
-
-                        ||
-
-                        //Selected value is not null (after reverting conversions) and is one of the available options (after reverting conversions)
-                        (Helpers.ConversionsHelpers.TryChangeType(riskOption.RevertConversions(riskData, selOpt.SelectedValue), riskOption.GetRiskPropertyType(riskData), out object convSelValue) &&
-                        Helpers.ConversionsHelpers.TryChangeType(riskOption.RevertConversions(riskData, o), riskOption.GetRiskPropertyType(riskData), out object convCurrOpt) &&
-                        convSelValue != null && convSelValue.Equals(convCurrOpt))
-
-                        ||
-
-                        //Selected value is not null (after applying conversions) and is one of the available options (after applying conversions)
-                        (Helpers.ConversionsHelpers.TryChangeType(riskOption.ApplyConversions(selOpt.SelectedValue), riskOption.GetRiskPropertyType(riskData), out convSelValue) &&
-                        Helpers.ConversionsHelpers.TryChangeType(riskOption.ApplyConversions(o), riskOption.GetRiskPropertyType(riskData), out convCurrOpt) &&
-                        convSelValue != null && convSelValue.Equals(convCurrOpt))
-
-                        ||
-
-                        //Selected value (after reverting the conversions) is one of the available options
-                        (riskOption.RevertConversions(riskData, selOpt.SelectedValue)?.Equals(o) ?? false)
-
-                        )
-                    )
+                if (selOpt != null)
                 {
-                    option.SelectedValue = selOpt.SelectedValue;
+                    bool anyMatch = false;
+                    foreach (var optionCandidate in options)
+                    {
+                        if (IsMatch(selOpt.SelectedValue, optionCandidate))
+                        {
+                            anyMatch = true;
+                            break;
+                        }
+                    }
+
+                    option.SelectedValue = anyMatch ? selOpt.SelectedValue : defaultValue;
                 }
                 else
                 {
@@ -96,22 +83,66 @@ namespace DecusTest.Business
             }
 
             return option;
+
+
+            // Helper to try convert using riskOption's target property type
+            bool TryConvert(object input, out object converted)
+            {
+                return ConversionsHelpers.TryChangeType(input, riskOption.GetRiskPropertyType(riskData), out converted);
+            }
+
+            // Helper to determine if the selected value matches a candidate option
+            bool IsMatch(object selectedValue, object candidate)
+            {
+                // 1) Direct equality when selected value is not null
+                //Selected value is not null and is one of the available options
+                if (selectedValue != null && selectedValue.Equals(candidate))
+                    return true;
+
+                // 2) Compare after reverting conversions for both values
+                //    Selected value is not null (after reverting conversions) and is one of the available options (after reverting conversions)
+                if (TryConvert(riskOption.RevertConversions(riskData, selectedValue), out object convSel) &&
+                    TryConvert(riskOption.RevertConversions(riskData, candidate), out object convCand) &&
+                    convSel != null && convSel.Equals(convCand))
+                    return true;
+
+                // 3) Compare after applying conversions for both values
+                //    Selected value is not null (after applying conversions) and is one of the available options (after applying conversions)
+                if (TryConvert(riskOption.ApplyConversions(selectedValue), out convSel) &&
+                    TryConvert(riskOption.ApplyConversions(candidate), out convCand) &&
+                    convSel != null && convSel.Equals(convCand))
+                    return true;
+
+                // 4) Compare raw reverted value equality (safe null-aware)
+                //Selected value (after reverting the conversions) is one of the available options
+                if (riskOption.RevertConversions(riskData, selectedValue)?.Equals(candidate) ?? false)
+                    return true;
+
+                return false;
+            }
         }
 
         public static void SetRiskPropertyValue(RiskData riskData, string riskPropertyName, object value, Dictionary<object, object> conversions = null)
         {
-            //First apply any necessary conversions
-            if (conversions != null && conversions.Count > 0 && value != null && conversions.TryGetValue(value, out object convertedValue))
-            {
-                value = convertedValue;
-            }
-
+            //First apply any necessary conversions           
+                if (conversions != null && conversions.Count > 0 && value != null && conversions.TryGetValue(value, out object convertedValue))
+                {
+                    value = convertedValue;
+                }
+            
             //Set value
             PropertyInfo propertyInfo = riskData.GetType().GetProperty(riskPropertyName);
-
+            
             try
             {
-                propertyInfo.SetValue(riskData, Convert.ChangeType(value, propertyInfo.PropertyType), null);                
+                // Note for interview:
+                // While this is still not ideal, it avoids having to catch and handle exceptions for all properties that are nullable, which there are a few of them.
+                // This would need to be refactored and remove the additional try{} catch{} block leaving only the catch section to handle any other excpetions 
+                if (propertyInfo.PropertyType.FullName.StartsWith("System.Nullable"))
+                    propertyInfo.SetValue(riskData, Convert.ChangeType(value, propertyInfo.PropertyType.GenericTypeArguments[0]), null);
+
+                else
+                    propertyInfo.SetValue(riskData, Convert.ChangeType(value, propertyInfo.PropertyType), null);
             }
             catch
             {
