@@ -12,7 +12,7 @@
         public bool? OptionalCoverageA { get; set; }
         public double? OptionalCoverageB { get; set; }
         public string OptionalCoverageC { get; set; }
-
+        public string OptionalCoverageD { get; set; }
         public double? Premium { get; set; }
         public double? SecondaryPremium { get; set; }
     }

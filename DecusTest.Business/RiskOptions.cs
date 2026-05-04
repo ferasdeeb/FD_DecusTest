@@ -28,6 +28,14 @@ namespace DecusTest.Business
                 RiskPropertyName = "OptionalCoverageC",
                 Conversions = new Dictionary<object, object>()
             }
+            ,
+            new RiskOption()
+            {
+                Name = "OptionalCoverageD",
+                NiceName = "Optional Coverage D",
+                RiskPropertyName = "OptionalCoverageD", 
+                Conversions = new Dictionary<object, object>() {  { "Not Applicable (N/A)", null}, { "Included", true },{ "Excluded", false } }
+            }
         };
 
         public static bool TryGetRiskOption(string name, out RiskOption riskOption)
