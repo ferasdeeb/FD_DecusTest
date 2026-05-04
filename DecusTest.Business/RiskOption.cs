@@ -27,18 +27,18 @@ namespace DecusTest.Business
         {
             if (Conversions != null && Conversions.Count > 0)
             {
-        /*
-         *      Interview Note: Old Code if needed
-         * 
-            
-                KeyValuePair<object, object> conversionApplied = Conversions.FirstOrDefault(c => c.Value == null && value == null 
-                                                                                            || (Helpers.ConversionsHelpers.TryChangeType(c.Value, this.GetRiskPropertyType(obj), out object convertedValue)
-                                                                                                        && convertedValue != null 
-                                                                                                        && convertedValue.Equals(value)
-                                                                                                ) 
-                                                                                            || value != null && value.Equals(c.Value)
-            );
-        */
+                /*
+                 *      Interview Note: The commented code had been refactored to make it earier to debug, I left the old Code commented in case needed during the interview 
+                 */
+
+                //    KeyValuePair<object, object> conversionApplied = Conversions.FirstOrDefault(c => c.Value == null && value == null 
+                //                                                                                || (Helpers.ConversionsHelpers.TryChangeType(c.Value, this.GetRiskPropertyType(obj), out object convertedValue)
+                //                                                                                            && convertedValue != null 
+                //                                                                                            && convertedValue.Equals(value)
+                //                                                                                    ) 
+                //                                                                                || value != null && value.Equals(c.Value)
+                //);
+                /* */
 
 
                 KeyValuePair<object, object> conversionApplied = default;

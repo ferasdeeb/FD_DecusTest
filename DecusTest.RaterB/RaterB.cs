@@ -2,6 +2,7 @@
 using DecusTest.Business.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DecusTest.RaterB
 {
@@ -19,6 +20,12 @@ namespace DecusTest.RaterB
             var results = new RatingResults();
 
             results.RatingOptions = GetOptions(_riskData, selectedOptions);
+            //  Note for Interview: The call to GetOptions is not strictly necessry as the options already exist in the selectedOptions list.
+            //  The method ValidateSelectedOptions has already been called prior to Calculate Rate and it ensures that the selected options are valid and available for the given risk data.
+            //   I might be missing some context of why this call is needed. But wasnted to leave a note that line 22 can be removed, and replaced with more efficient code (below) that just filters the selectedOptions
+            //   list to only include available options
+
+            //results.RatingOptions = selectedOptions.Where(o => o.Available).ToList();
 
             results.Premium = CalculatePremium(_riskData);
 
