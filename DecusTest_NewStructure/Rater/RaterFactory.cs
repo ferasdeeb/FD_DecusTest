@@ -11,27 +11,35 @@ namespace DecusTest_NewStructure.Rater
 
     public class RaterFactory(ILogger<RaterFactory> log) : IRaterFactory
     {
-       
+
         public IRater CreateRater(string Name, IEnumerable<IOptionalCover> optionalCoversList, IRiskDataInput riskDataInput)
         {
-
-            switch (Name)
+            try
             {
-                case "RaterA":
-                    IRater raterA =  new RaterA(log, riskDataInput, optionalCoversList);
+                switch (Name)
+                {
+                    case "RaterA":
+                        IRater raterA = new RaterA(log, riskDataInput, optionalCoversList);
 
-                    raterA.SetOptionalCovers();
-                    return raterA;
+                        raterA.SetOptionalCovers();
+                        return raterA;
 
-                case "RaterB":
-                    IRater raterB = new RaterB(log, riskDataInput, optionalCoversList);
-                    raterB.SetOptionalCovers();
-                    return raterB;
-                default:
-                    throw new ArgumentException("Invalid rater name");
+                    case "RaterB":
+                        IRater raterB = new RaterB(log, riskDataInput, optionalCoversList);
+                        raterB.SetOptionalCovers();
+                        return raterB;
+                    default:
+                        {
+                            log.LogError($"Invalid rater name. Name: {Name}");
+                            throw new ArgumentException($"Invalid rater name. Name: {Name}");
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, $"Error Creating Rater: {ex.Message}");
+                throw;
             }
         }
     }
-
-
 }
