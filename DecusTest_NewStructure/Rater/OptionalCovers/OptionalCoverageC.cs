@@ -11,5 +11,6 @@ namespace DecusTest_NewStructure.Rater.OptionalCovers
             set { _defaultValue = value; }
         }
 
+        public override bool CanAddToPremium() => base.IsAvailable;
     }
 }

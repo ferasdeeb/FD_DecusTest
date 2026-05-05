@@ -4,7 +4,7 @@ using DecusTest_NewStructure.Rater.Processor;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DecusTest_NewStructure.Rater
-{ 
+{
     internal class Program
     {
         static void Main(string[] args)
@@ -12,10 +12,11 @@ namespace DecusTest_NewStructure.Rater
             var host = Builder.CreateDefaultBuilder(args).Build();
 
 
-            IRiskDataInput dataInput = new RiskDataInput { DistanceToWater = 5, State = Enums.StateEnum.FL, TotalInsuredValue = 10000 };
-            IRiskDataOutput riskDataOutput = new RiskDataOutput();
+            IRiskDataInput dataInput = new RiskDataInput { DistanceToWater = 25, State = Enums.StateEnum.FL, TotalInsuredValue = 10000 };
+            List<IRiskDataOutput> riskDataOutputs = new List<IRiskDataOutput>();
 
-            
+
+
 
             var riskProcessor = host.Services.GetRequiredService<IRiskRaterProcessor>();
             var raterFactory = host.Services.GetRequiredService<IRaterFactory>();
@@ -24,9 +25,14 @@ namespace DecusTest_NewStructure.Rater
 
 
 
-            riskProcessor.ProcessRiskRater( dataInput, riskDataOutput, raterFactory, covers);
+            var outputs = riskProcessor.ProcessRiskRater(dataInput, raterFactory, covers);
+
+            foreach (var output in outputs)
+            {
+                Console.WriteLine($"{output.Rater?.GetType().Name}:  Premium: {output.Premium}, Secondary Premium: {output.SecondaryPremium}");
 
 
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ namespace DecusTest_NewStructure.Rater
         public override IRiskDataOutput CalculateRate()
         {
             IRiskDataOutput result = new RiskDataOutput();
+            result.Rater = this;
             result.Premium = CalculatePremium(riskDataInput);
             result.SecondaryPremium = CalculateSecondaryPremium(riskDataInput);
 
@@ -49,16 +50,16 @@ namespace DecusTest_NewStructure.Rater
 
 
 
-
+            this.SetOptionalCovers();
             // Additional premiums
             foreach (var optionalCover in optionalCoversList)
             {
-                if (optionalCover is OptionalCoverageA)
+                if (optionalCover is OptionalCoverageA && optionalCover.CanAddToPremium() ) 
                 {
                     premium += 50;
                 }
 
-                if (optionalCover is OptionalCoverageC)
+                if (optionalCover is OptionalCoverageC && optionalCover.CanAddToPremium())
                 {
                     switch ((((OptionalCoverageC)optionalCover).DefaultValue))
                     {

@@ -25,6 +25,7 @@
             set { _niceName = value; }
         }
 
+        public abstract bool CanAddToPremium();
 
     }
 

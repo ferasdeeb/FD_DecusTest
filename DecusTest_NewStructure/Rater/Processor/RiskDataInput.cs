@@ -11,6 +11,7 @@ namespace DecusTest_NewStructure.Rater.Processor
 
     public class RiskDataOutput : IRiskDataOutput
     {
+        public IRater? Rater { get; set; } = null;
         public double Premium { get; set; } = 0;
         public double? SecondaryPremium { get; set; } = 0;
     }

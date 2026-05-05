@@ -5,6 +5,7 @@
         string Name { get; set; }
         string NiceName { get; set; }
         bool IsAvailable { get; set; }
+        bool CanAddToPremium();
         
     }
 }

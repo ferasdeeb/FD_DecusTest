@@ -5,6 +5,6 @@ namespace DecusTest_NewStructure.Rater.Processor
 {
     public interface IRiskRaterProcessor
     {
-        void ProcessRiskRater(IRiskDataInput riskDataInput, IRiskDataOutput riskDataOutput, IRaterFactory factory, IEnumerable<IOptionalCover> optionalCoversList);
+        IEnumerable<IRiskDataOutput> ProcessRiskRater(IRiskDataInput riskDataInput, IRaterFactory factory, IEnumerable<IOptionalCover> optionalCoversList);
     }
 }

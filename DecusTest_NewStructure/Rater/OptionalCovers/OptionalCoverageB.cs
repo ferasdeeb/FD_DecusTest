@@ -10,6 +10,8 @@ namespace DecusTest_NewStructure.Rater.OptionalCovers
             get { return _defaultValue; }
             set { _defaultValue = value; }
         }
-         
+
+        public override bool CanAddToPremium() =>  base.IsAvailable && DefaultValue != CoverBOptionsEnum.Excluded;
+
     }
 }
