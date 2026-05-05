@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.5.11723.231 stable
+VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecusTest.UI.Web", "DecusTest.UI.Web\DecusTest.UI.Web.csproj", "{C1602510-2C44-49F5-BB3B-AEF93106F401}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecusTest.RaterB", "DecusTest.RaterB\DecusTest.RaterB.csproj", "{59240D68-6634-4EF8-9149-69CEE736122C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecusTest_NewStructure", "DecusTest_NewStructure\DecusTest_NewStructure.csproj", "{582DA74D-6333-4090-9E73-50FE2C657B64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecusTest_NewStructure.Tests", "DecusTest_NewStructure.Tests\DecusTest_NewStructure.Tests.csproj", "{919F9630-A49F-4494-8B2A-49BD9C9CCFA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{582DA74D-6333-4090-9E73-50FE2C657B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{582DA74D-6333-4090-9E73-50FE2C657B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{582DA74D-6333-4090-9E73-50FE2C657B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919F9630-A49F-4494-8B2A-49BD9C9CCFA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919F9630-A49F-4494-8B2A-49BD9C9CCFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919F9630-A49F-4494-8B2A-49BD9C9CCFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919F9630-A49F-4494-8B2A-49BD9C9CCFA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
