@@ -174,7 +174,7 @@
 			<h2>Risk Data</h2>
 
 			<label for="tiv">Total Insured Value</label>
-			<input type="number" id="tiv" min="1" step="any" value="10000">
+			<input type="number" id="tiv" min="1" step="any" >
 
 			<label for="state">State</label>
 			<select id="state">
@@ -183,7 +183,7 @@
 			</select>
 
 			<label for="distance">Distance to water (in miles)</label>
-			<input type="number" id="distance" min="1" step="any" value="25">
+			<input type="number" id="distance" min="1" step="any" >
 
 			<br><br>
 			<button onclick="calculate();return false;">Calculate</button>
